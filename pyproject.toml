@@ -69,7 +69,7 @@ dependencies = [
   "ruff>=0.0.243",
 ]
 [tool.hatch.envs.lint.scripts]
-typing = "mypy --install-types --non-interactive {args:xmlsafemod tests}"
+typing = "mypy --install-types --non-interactive {args:xmlsafemod.py tests}"
 style = [
   "ruff {args:.}",
   "black --check --diff {args:.}",

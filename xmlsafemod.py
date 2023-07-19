@@ -18,6 +18,7 @@ import os.path
 import pwd
 import sys
 import tempfile
+import typing as t
 import xml.etree.ElementTree as et  # noqa: N813
 
 __version__ = "0.1.0"
@@ -35,6 +36,22 @@ def get_gid(group_name: str, default: int) -> int:
         return grp.getgrnam(group_name).gr_gid
     except KeyError:
         return default
+
+
+def modify_document(
+    root: et.ElementTree,
+    secrets: t.Mapping[str, str],
+    changes: t.Sequence[t.Sequence[str]],
+):
+    # Replace all the secrets in the XML file.
+    for change in changes:
+        # We skip anything without a match for no paths.
+        if change[0] not in secrets or len(change) == 1:
+            continue
+        # For each path, substitute the secret.
+        for path in change[1:]:
+            for elem in root.findall(path):
+                elem.text = secrets[change[0]]
 
 
 def make_parser() -> argparse.ArgumentParser:
@@ -91,15 +108,7 @@ def main():
     with open(args.src, encoding="UTF-8") as fh:
         root = et.parse(fh)  # noqa: S314
 
-    # Replace all the secrets in the XML file.
-    for change in args.set or ():
-        # We skip anything without a match for no paths.
-        if change[0] not in secrets or len(change) == 1:
-            continue
-        # For each path, substitute the secret.
-        for path in change[1:]:
-            for elem in root.findall(path):
-                elem.text = secrets[change[0]]
+    modify_document(root, secrets, args.set or ())
 
     dest = args.src if args.in_place else args.dest
 
