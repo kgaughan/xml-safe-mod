@@ -13,4 +13,4 @@ echo '{"secret1": "password1"}' | xml-safe-mod --src /etc/daemon/config.xml --in
 echo '{"secret1": "password1"}' | xml-safe-mod --src /etc/daemon/config.xml.in --dest /etc/daemon/config.xml --owner daemon --group daemon --perms 600 --set secret1 ./xpath/expression
 ```
 
-It would support the [ElementTree subset of XPath](https://docs.python.org/3/library/xml.etree.elementtree.html#supported-xpath-syntax).
+It supports the [ElementTree subset of XPath](https://docs.python.org/3/library/xml.etree.elementtree.html#supported-xpath-syntax).

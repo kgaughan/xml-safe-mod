@@ -18,7 +18,9 @@ import os.path
 import pwd
 import sys
 import tempfile
-import xml.etree.ElementTree as et
+import xml.etree.ElementTree as et  # noqa: N813
+
+__version__ = "0.1.0"
 
 
 def get_uid(user_name: str, default: int) -> int:
@@ -87,7 +89,7 @@ def main():
     secrets = json.load(sys.stdin)
 
     with open(args.src, encoding="UTF-8") as fh:
-        root = et.parse(fh)
+        root = et.parse(fh)  # noqa: S314
 
     # Replace all the secrets in the XML file.
     for change in args.set or ():
