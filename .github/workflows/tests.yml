@@ -44,6 +44,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
+          - "3.6"
           - "3.7"
           - "3.8"
           - "3.9"
@@ -53,18 +54,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install hatch
-        run: pipx install hatch
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Run tests
-        run: |
-          hatch run test
+      - name: install pytest
+        run: pip install pytest
 
-      - name: Build package
-        run: |
-          hatch build -t wheel
+      - name: Run tests
+        run: pytest tests
