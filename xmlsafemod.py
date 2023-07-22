@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 """
-xml-safe-mod
-by Keith Gaughan <k@stereochro.me>
-
 A utility for safely making updates to XML configuration files.
 
 Copyright (c) Keith Gaughan, 2023.
 This software is provided under the terms of the MIT license. See LICENSE
 for full details.
+
+Repo: https://github.com/kgaughan/xml-safe-mod
 """
 
 import argparse

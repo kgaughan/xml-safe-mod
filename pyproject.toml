@@ -1,21 +1,21 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
 
 [project]
 name = "xml-safe-mod"
-dynamic = ["version"]
-description = 'A utility for safely making updates to XML configuration files'
+dynamic = ["version", "description"]
 readme = "README.md"
-requires-python = ">=3.7"
-license = "MIT"
-keywords = []
+requires-python = ">=3.6"
+license = {file = "LICENSE"}
 authors = [
   { name = "Keith Gaughan", email = "k@stereochro.me" },
 ]
 classifiers = [
+  "License :: OSI Approved :: MIT License",
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
+  "Programming Language :: Python :: 3.6",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
@@ -33,56 +33,18 @@ Source = "https://github.com/kgaughan/xml-safe-mod"
 [project.scripts]
 xml-safe-mod = "xmlsafemod:main"
 
-[tool.hatch.version]
-path = "xmlsafemod.py"
-
-[tool.hatch.build]
-exclude = [
-  ".gitignore",
-]
-
-[tool.hatch.envs.default]
-dependencies = [
-  "coverage[toml]>=6.5",
+[project.optional-dependencies]
+test = [
   "pytest",
 ]
-[tool.hatch.envs.default.scripts]
-test = "pytest {args:tests}"
-test-cov = "coverage run -m pytest {args:tests}"
-cov-report = [
-  "- coverage combine",
-  "coverage report",
-]
-cov = [
-  "test-cov",
-  "cov-report",
-]
-
-[[tool.hatch.envs.all.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
-
-[tool.hatch.envs.lint]
-detached = true
-dependencies = [
+lint = [
   "black>=23.1.0",
   "mypy>=1.0.0",
   "ruff>=0.0.243",
 ]
-[tool.hatch.envs.lint.scripts]
-typing = "mypy --install-types --non-interactive {args:xmlsafemod.py tests}"
-style = [
-  "ruff {args:.}",
-  "black --check --diff {args:.}",
-]
-fmt = [
-  "black {args:.}",
-  "ruff --fix {args:.}",
-  "style",
-]
-all = [
-  "style",
-  "typing",
-]
+
+[tool.flit.module]
+name = "xmlsafemod"
 
 [tool.black]
 target-version = ["py37"]

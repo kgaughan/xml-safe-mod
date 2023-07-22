@@ -17,4 +17,6 @@ It supports the [ElementTree subset of XPath](https://docs.python.org/3/library/
 
 ## Supported versions of Python
 
-If you need to use this on older versions of Python, such as 3.5 or 3.6, there's nothing specific to it that should stop you from running it. If you remove the type annotations, it should work on any Python 3 release. However, the only versions officially supported are 3.7+ due to the needs of Hatch and the versions of Python available on Github Actions.
+If you remove the type annotations, it should work on any Python 3 release. However, the only versions officially supported are 3.6+ due to the needs of [Flit] and the versions of Python available on Github Actions.
+
+[Flit]: https://flit.pypa.io/

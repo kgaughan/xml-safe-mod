@@ -22,9 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install hatch
-        run: pipx install hatch
-
       - name: Install Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -32,18 +29,26 @@ jobs:
 
       - name: Run linters
         run: |
-          hatch run lint:all
+          python3 -m venv .venv
+          .venv/bin/pip install '.[lint]'
+          make lint
 
       - name: Run golden tests
         run: |
           ./tests/golden/golden.sh
 
-  build:
+      - name: Build package
+        run: |
+          pipx install flit
+          flit build
+
+  test:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
         python-version:
+          - "3.6"
           - "3.7"
           - "3.8"
           - "3.9"
@@ -53,9 +58,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install hatch
-        run: pipx install hatch
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -63,8 +65,6 @@ jobs:
 
       - name: Run tests
         run: |
-          hatch run test
-
-      - name: Build package
-        run: |
-          hatch build -t wheel
+          python3 -m venv .venv
+          .venv/bin/pip install '.[test]'
+          make test
