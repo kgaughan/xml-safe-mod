@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 """
-xml-safe-mod
-by Keith Gaughan <k@stereochro.me>
-
 A utility for safely making updates to XML configuration files.
 
 Copyright (c) Keith Gaughan, 2023.
 This software is provided under the terms of the MIT license. See LICENSE
 for full details.
+
+Repo: https://github.com/kgaughan/xml-safe-mod
 """
 
 import argparse
@@ -21,21 +20,25 @@ import tempfile
 import typing as t
 import xml.etree.ElementTree as et  # noqa: N813
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 def get_uid(user_name: str, default: int) -> int:
-    try:
-        return pwd.getpwnam(user_name).pw_uid
-    except KeyError:
-        return default
+    if user_name is not None:
+        try:
+            return pwd.getpwnam(user_name).pw_uid
+        except KeyError:
+            print(f"WARNING: no such user '{user_name}'", file=sys.stderr)
+    return default
 
 
 def get_gid(group_name: str, default: int) -> int:
-    try:
-        return grp.getgrnam(group_name).gr_gid
-    except KeyError:
-        return default
+    if group_name is not None:
+        try:
+            return grp.getgrnam(group_name).gr_gid
+        except KeyError:
+            print(f"WARNING: no such group '{group_name}'", file=sys.stderr)
+    return default
 
 
 def modify_document(
@@ -124,8 +127,8 @@ def main():
 
     # Copy ownership from source if nothing's explicitly given.
     statinfo = os.stat(args.src)
-    uid = statinfo.st_uid if args.owner is None else get_uid(args.owner)
-    gid = statinfo.st_gid if args.group is None else get_gid(args.group)
+    uid = get_uid(args.owner, statinfo.st_uid)
+    gid = get_gid(args.group, statinfo.st_gid)
     os.chown(tmp_name, uid, gid)
 
     os.replace(tmp_name, dest)
