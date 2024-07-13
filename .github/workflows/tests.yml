@@ -24,11 +24,19 @@ jobs:
           cache-prefix: "rye-lint"
       - name: Run linters
         run: rye lint
+
+  golden:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
       - name: Run golden tests
         run: |
           ./tests/golden/golden.sh
 
-  build:
+  tests:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
