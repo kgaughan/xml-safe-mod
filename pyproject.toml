@@ -1,22 +1,22 @@
 #:schema https://json.schemastore.org/pyproject.json
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
 
 [project]
 name = "xmlsafemod"
 dynamic = ["version"]
 description = 'A utility for safely making updates to XML configuration files'
-readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Keith Gaughan", email = "k@stereochro.me" }]
 requires-python = ">=3.7"
-license = "MIT"
+readme = "README.md"
 keywords = []
-authors = [
-  { name = "Keith Gaughan", email = "k@stereochro.me" },
-]
 classifiers = [
   "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
@@ -36,28 +36,27 @@ Source = "https://github.com/kgaughan/xml-safe-mod"
 [project.scripts]
 xml-safe-mod = "xmlsafemod:main"
 
-[tool.hatch.version]
-path = "xmlsafemod.py"
-
-[tool.hatch.build]
-exclude = [
-  ".gitignore",
-]
-
 [tool.rye]
 dev-dependencies = [
+  "mypy>=1.4.1",
   "coverage[toml]>=6.5",
   "pytest",
   "pytest-cov>=2.12.1",
-  "mypy>=1.4.1",
 ]
 universal = true
 generate-hashes = true
 managed = true
 
+[tool.flit.module]
+name = "xmlsafemod"
+
+[tool.black]
+line-length = 120
+
 [tool.ruff]
 target-version = "py37"
 line-length = 120
+src = ["src", "test"]
 
 [tool.ruff.lint]
 select = [
@@ -88,23 +87,11 @@ select = [
   "YTT",
 ]
 ignore = [
-  # Allow non-abstract empty methods in abstract base classes
-  "B027",
-  # Allow boolean positional values in function calls, like `dict.get(... True)`
-  "FBT003",
-  # Ignore checks for possible passwords
-  "S105", "S106", "S107",
-  # Ignore complexity
-  "C901", "PLR0911", "PLR0912", "PLR0913", "PLR0915",
-  # Allow print
-  "T201",
-]
-unfixable = [
-  # Don't touch unused imports
-  "F401",
+  "T201", # Allow print
 ]
 
 [tool.ruff.lint.isort]
+force-sort-within-sections = true
 known-first-party = ["xmlsafemod"]
 
 [tool.ruff.lint.flake8-tidy-imports]
@@ -112,22 +99,36 @@ ban-relative-imports = "all"
 
 [tool.ruff.lint.per-file-ignores]
 # Tests can use magic values, assertions, and relative imports
-"tests/**/*" = ["PLR2004", "S101", "TID252"]
+"tests/**/*" = ["PLR2004", "S101", "TID252", "E501"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --cov=xmlsafemod --junitxml=tests/results.xml --cov-report html"
+junit_logging = "out-err"
+junit_family = "xunit2"
 
 [tool.coverage.run]
 source_pkgs = ["xmlsafemod", "tests"]
 branch = true
 parallel = true
-omit = [
-]
 
 [tool.coverage.paths]
 xmlsafemod = ["xmlsafemod"]
 tests = ["tests"]
 
 [tool.coverage.report]
+ignore_errors = true
+# Regexes for lines to exclude from consideration
 exclude_lines = [
-  "no cov",
+  "pragma: no cover",
+  "def __repr__",
+  "if self.debug",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if 0:",
   "if __name__ == .__main__.:",
-  "if TYPE_CHECKING:",
+  "pass",
 ]
+
+[tool.mypy]
+ignore_missing_imports = true
