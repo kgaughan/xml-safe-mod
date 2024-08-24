@@ -2,46 +2,32 @@
 __pycache__/
 *.py[cod]
 
-# C extensions
-*.so
+# Environments
+.venv/
 
-# Distribution / packaging
+# Distribution/packaging
 dist/
 
-/.*_cache/
-
 # Unit test / coverage reports
-htmlcov/
 .coverage
-.coverage.*
-.cache
-coverage.xml
-*.cover
-*.py,cover
-cover/
+htmlcov/
+tests/results.xml
+.*_cache/
 
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
+# General detritus
+*~
+.*.sw?
+*.orig
+*.bak
 *.log
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
+# Databases
+*.db
+*.sqlite
+*.sqlite3
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+# Mkdocs
+/site/
 
-# mkdocs documentation
-/site
-
-# mypy
-.dmypy.json
-dmypy.json
+# Other
+_version.py
